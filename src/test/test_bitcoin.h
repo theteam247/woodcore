@@ -7,7 +7,6 @@
 
 #include "chainparamsbase.h"
 #include "key.h"
-#include "pubkey.h"
 #include "txdb.h"
 #include "txmempool.h"
 
@@ -18,7 +17,6 @@
  * This just configures logging and chain parameters.
  */
 struct BasicTestingSetup {
-    ECCVerifyHandle globalVerifyHandle;
 
     BasicTestingSetup(const std::string& chainName = CBaseChainParams::MAIN);
     ~BasicTestingSetup();

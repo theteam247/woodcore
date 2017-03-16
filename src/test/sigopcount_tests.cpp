@@ -3,7 +3,6 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "main.h"
-#include "pubkey.h"
 #include "key.h"
 #include "script/script.h"
 #include "script/standard.h"

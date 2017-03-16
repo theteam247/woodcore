@@ -165,13 +165,25 @@ BOOST_AUTO_TEST_CASE(key_test1)
         BOOST_CHECK(rkey2C == pubkey2C);
     }
 
+   // dumpKeyInfo(key1);
+   // dumpKeyInfo(key1c);
+   // dumpKeyInfo(key2);
+
     // test deterministic signing
+
+   // printf("    * pubkey (hex): %s\n", HexStr(vchPubKey).c_str());
 
     std::vector<unsigned char> detsig, detsigc;
     string strMsg = "Very deterministic message";
     uint256 hashMsg = Hash(strMsg.begin(), strMsg.end());
     BOOST_CHECK(key1.Sign(hashMsg, detsig));
     BOOST_CHECK(key1C.Sign(hashMsg, detsigc));
+// made it here no errors... 
+    
+    printf("    * detsig %s\n", HexStr(detsig).c_str());
+    printf("    * detsigc %s\n", HexStr(detsigc).c_str());
+
+
     BOOST_CHECK(detsig == detsigc);
     BOOST_CHECK(detsig == ParseHex("304402205dbbddda71772d95ce91cd2d14b592cfbc1dd0aabd6a394b6c2d377bbe59d31d022014ddda21494a4e221f0824f0b8b924c43fa43c0ad57dccdaa11f81a6bd4582f6"));
     BOOST_CHECK(key2.Sign(hashMsg, detsig));

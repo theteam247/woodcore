@@ -6,7 +6,6 @@
 #include "key.h"
 #include "main.h"
 #include "miner.h"
-#include "pubkey.h"
 #include "txmempool.h"
 #include "random.h"
 #include "script/standard.h"

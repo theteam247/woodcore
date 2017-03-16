@@ -18,10 +18,9 @@
 template<unsigned int BITS>
 class base_blob
 {
-protected:
+public:
     enum { WIDTH=BITS/8 };
     uint8_t data[WIDTH];
-public:
     base_blob()
     {
         memset(data, 0, sizeof(data));
@@ -162,5 +161,7 @@ inline uint256 uint256S(const std::string& str)
     rv.SetHex(str);
     return rv;
 }
+
+
 
 #endif // BITCOIN_UINT256_H

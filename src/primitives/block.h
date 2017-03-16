@@ -8,7 +8,6 @@
 
 #include "primitives/transaction.h"
 #include "serialize.h"
-#include "uint256.h"
 
 /** Nodes collect new transactions into a block, hash them into a hash tree,
  * and scan through nonce values to make the block's hash satisfy proof-of-work
@@ -21,13 +20,21 @@ class CBlockHeader
 {
 public:
     // header
+    static const int CURRENT_VERSION=2;
+    int nVersion;
+    uint256 hashPrevBlock;
+    uint256 hashMerkleRoot;
+    unsigned int nTime;
+    unsigned int nBits;
+    unsigned int nNonce;
+/*
     int32_t nVersion;
     uint256 hashPrevBlock;
     uint256 hashMerkleRoot;
     uint32_t nTime;
     uint32_t nBits;
     uint32_t nNonce;
-
+*/
     CBlockHeader()
     {
         SetNull();
@@ -68,6 +75,7 @@ public:
     {
         return (int64_t)nTime;
     }
+    std::string ToString() const;
 };
 
 

@@ -9,9 +9,9 @@
 #include "crypto/ripemd160.h"
 #include "crypto/sha1.h"
 #include "crypto/sha256.h"
-#include "pubkey.h"
 #include "script/script.h"
 #include "uint256.h"
+#include "key.h"
 
 using namespace std;
 
@@ -173,13 +173,14 @@ bool static IsValidSignatureEncoding(const std::vector<unsigned char> &sig) {
 }
 
 bool static IsLowDERSignature(const valtype &vchSig, ScriptError* serror) {
-    if (!IsValidSignatureEncoding(vchSig)) {
+    /*if (!IsValidSignatureEncoding(vchSig)) {
         return set_error(serror, SCRIPT_ERR_SIG_DER);
     }
     std::vector<unsigned char> vchSigCopy(vchSig.begin(), vchSig.begin() + vchSig.size() - 1);
     if (!CPubKey::CheckLowS(vchSigCopy)) {
         return set_error(serror, SCRIPT_ERR_SIG_HIGH_S);
     }
+    */
     return true;
 }
 
@@ -1406,8 +1407,10 @@ static bool VerifyWitnessProgram(const CScriptWitness& witness, int witversion, 
     return true;
 }
 
-bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const CScriptWitness* witness, unsigned int flags, const BaseSignatureChecker& checker, ScriptError* serror)
-{
+bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const CScriptWitness* witness, unsigned int flags, const BaseSignatureChecker& checker, ScriptError* serror)  {
+
+    //printf("inside VerifyScript");
+   
     static const CScriptWitness emptyWitness;
     if (witness == NULL) {
         witness = &emptyWitness;
@@ -1452,6 +1455,7 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const C
             stack.resize(1);
         }
     }
+    //printf("made it here");
 
     // Additional validation for spend-to-script-hash transactions:
     if ((flags & SCRIPT_VERIFY_P2SH) && scriptPubKey.IsPayToScriptHash())
@@ -1498,6 +1502,7 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const C
             }
         }
     }
+    //printf(" \n and heRRe \n");
 
     // The CLEANSTACK check is only performed after potential P2SH evaluation,
     // as the non-P2SH evaluation of a P2SH script will obviously not result in
@@ -1521,7 +1526,7 @@ bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const C
             return set_error(serror, SCRIPT_ERR_WITNESS_UNEXPECTED);
         }
     }
-
+    //if (set_success(serror)) printf(" we are apparently returning true yo \n");
     return set_success(serror);
 }
 
