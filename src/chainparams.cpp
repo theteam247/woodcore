@@ -97,13 +97,13 @@ public:
 
         // Deployment of BIP68, BIP112, and BIP113.
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1492732800; // May 1st, 2016
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1524268800; // May 1st, 2017
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1490054400; // Mar 21, 2017
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1524268800; // Mar 21, 2018
 
         // Deployment of SegWit (BIP141, BIP143, and BIP147)
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].bit = 1;
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1492732800;
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1524268800; // Never / undefined
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1490054400;  // Mar 21, 2017
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1521590400; // Mar 21, 2018
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -214,9 +214,7 @@ public:
         vFixedSeeds.clear();
         vSeeds.clear();
         // nodes with support for servicebits filtering should be at the top
-        vSeeds.push_back(CDNSSeedData("woodcointools.com", "testnet-seed.woodcointools.com"));
-        vSeeds.push_back(CDNSSeedData("xurious.com", "testnet-seed.ltc.xurious.com"));
-        vSeeds.push_back(CDNSSeedData("wemine-testnet.com", "dnsseed.wemine-testnet.com"));
+        vSeeds.push_back(CDNSSeedData("woodcoin.org", "dnsseed.woodcointools.com"));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,111);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,196);
@@ -250,7 +248,7 @@ class CRegTestParams : public CChainParams {
 public:
     CRegTestParams() {
         strNetworkID = "regtest";
-        consensus.nSubsidyHalvingInterval = 150;
+        //consensus.nSubsidyHalvingInterval = 150;
         consensus.nMajorityEnforceBlockUpgrade = 750;
         consensus.nMajorityRejectBlockOutdated = 950;
         consensus.nMajorityWindow = 1000;
