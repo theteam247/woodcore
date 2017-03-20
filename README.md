@@ -1,17 +1,17 @@
-Woodcoin Core integration/staging tree
+PRW -  Woodcoin Core integration/staging tree (yes tree)
 =====================================
 
-This project aims to build a fully armed and operational bitcoin-core ported to the woodcoin network.  
+This project is a fully armed and operational bitcoin-core ported to the woodcoin network.  
 
-Three tasks make this port complete:
+Three tasks have made this port complete:
 
-1) Skein hash function for Proof Of Work
-2) secp256r1 for ECDSA signatures
-3) Logarithmic supply curve
+1) Skein hash function for Proof Of Work inserted
+2) prime256r1 for ECDSA signatures (including backport to OpenSSL and removal of libsecp256k1)
+3) Logarithmic supply curve for long-term economics
 
-Once complete, we have a segwit-enabled woodcoin network in place.
+Voila - we now have a segwit-enabled woodcoin client in place for those who would lite to use it.
 
-In the meantime, please continue to use the full woodcoin node and client:
+If you are looking for the Funkenstein1.0.1 client please continue to use the full woodcoin node and client:
 
 https://github.com/funkshelper/woodcoin.git
 
@@ -34,11 +34,10 @@ out collectively by the network. Woodcoin Core is the name of ONE open source
 software which enables the use of this currency, built from the code made by the 
 wizards of the bitcoin-core team. 
 
-Woodcoin differs from its predecessors bitcoin, woodcoin, dogecoin, ethereum, et al.
+Woodcoin differs from its predecessors bitcoin, dogecoin, ethereum, et al.
 in that it is designed to have a money supply curve which might last more than 20 years.
-Bitcoin and woodcoin employ an exponentially decreasing reward drop which means that miners 
+Litecoin and Bitcoin employ an exponentially decreasing reward drop which means that miners 
 are likely to flee, unless fees grow exponentially, in which case users will flee.  
-
 
 For more information, as well as an immediately useable, binary version of
 the Woodcoin Core software, see [https://Woodcoin.org](https://Woodcoin.org).
