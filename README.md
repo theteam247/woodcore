@@ -3,7 +3,7 @@ PRW -  Woodcoin Core integration/staging tree (yes tree)
 
 This project is a fully armed and operational bitcoin-core ported to the woodcoin network.  
 
-Dedicated to my heros Sipa, Nullc, and Coblee.  Props and Kudos.  
+Dedicated to Sipa, Nullc, and Coblee.  Props and Kudos.  
 
 Three tasks have made this port complete:
 
