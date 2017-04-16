@@ -42,6 +42,7 @@ uint256 CBlockHeader::GetPoWHash() const
         return thash2;
 }
 
+
 std::string CBlock::ToString() const
 {
     std::stringstream s;

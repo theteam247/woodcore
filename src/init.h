@@ -18,6 +18,8 @@ class thread_group;
 
 void StartShutdown();
 bool ShutdownRequested();
+extern std::string strWalletFile;
+extern CWallet* pwalletMain;
 /** Interrupt threads */
 void Interrupt(boost::thread_group& threadGroup);
 void Shutdown();
