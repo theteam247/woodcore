@@ -6,7 +6,7 @@
 #define BITCOIN_COINCONTROL_H
 
 #include "primitives/transaction.h"
-
+#include <boost/optional.hpp>
 /** Coin Control Features. */
 class CCoinControl
 {
@@ -21,7 +21,7 @@ public:
     //! Override estimated feerate
     bool fOverrideFeeRate;
     //! Feerate to use if overrideFeeRate is true
-    CFeeRate nFeeRate;
+    boost::optional<CFeeRate> m_feerate;
 
     CCoinControl()
     {
@@ -35,7 +35,7 @@ public:
         fAllowWatchOnly = false;
         setSelected.clear();
         nMinimumTotalFee = 0;
-        nFeeRate = CFeeRate(0);
+        m_feerate.reset();
         fOverrideFeeRate = false;
     }
 

@@ -69,8 +69,8 @@ bool CKey::CheckSignatureElement(const unsigned char *vch, int len, bool half) {
 
 void CKey::MakeNewKey(bool fCompressedIn) {
     do {
-        GetRandBytes(vch, sizeof(vch));
-    } while (!Check(vch));
+        GetStrongRandBytes(keydata.data(), keydata.size());
+    } while (!Check(keydata.data()));
     fValid = true;
     fCompressed = fCompressedIn;
 }
@@ -79,7 +79,7 @@ bool CKey::SetPrivKey(const CPrivKey &privkey, bool fCompressedIn) {
     CECKey key;
     if (!key.SetPrivKey(&privkey[0], privkey.size()))
         return false;
-    key.GetSecretBytes(vch);
+    key.GetSecretBytes(keydata.data());
     fCompressed = fCompressedIn;
     fValid = true;
     return true;
@@ -90,7 +90,7 @@ CPrivKey CKey::GetPrivKey() const {
     CPrivKey privkey;
     int privkeylen, ret;
     CECKey key;
-    key.SetSecretBytes(vch);
+    key.SetSecretBytes(keydata.data());
     privkeylen = key.GetPrivKeySize(fCompressed);
     assert(privkeylen);
     privkey.resize(privkeylen);
@@ -104,7 +104,7 @@ CPubKey CKey::GetPubKey() const {
     CPubKey result;
     std::vector<unsigned char> pubkey;
     CECKey key;
-    key.SetSecretBytes(vch);
+    key.SetSecretBytes(keydata.data());
     key.GetPubKey(pubkey, fCompressed);
     result.Set(pubkey.begin(), pubkey.end());
     assert(result.IsValid());
@@ -115,7 +115,7 @@ bool CKey::Sign(const uint256 &hash, std::vector<unsigned char>& vchSig, bool lo
     if (!fValid)
         return false;
     CECKey key;
-    key.SetSecretBytes(vch);
+    key.SetSecretBytes(keydata.data());
     return key.Sign(hash, vchSig, lowS);
 }
 
@@ -125,7 +125,7 @@ bool CKey::SignCompact(const uint256 &hash, std::vector<unsigned char>& vchSig) 
     vchSig.resize(65);
     int rec = -1;
     CECKey key;
-    key.SetSecretBytes(vch);
+    key.SetSecretBytes(keydata.data());
     if (!key.SignCompact(hash, &vchSig[1], rec))
         return false;
     assert(rec != -1);
@@ -137,7 +137,7 @@ bool CKey::Load(CPrivKey &privkey, CPubKey &vchPubKey, bool fSkipCheck=false) {
     CECKey key;
     if (!key.SetPrivKey(&privkey[0], privkey.size(), fSkipCheck))
         return false;
-    key.GetSecretBytes(vch);
+    key.GetSecretBytes(keydata.data());
     fCompressed = vchPubKey.IsCompressed();
     fValid = true;
 
@@ -208,7 +208,7 @@ void static BIP32Hash(const unsigned char chainCode[32], unsigned int nChild, un
                                .Finalize(output);
 }
 
-bool CKey::Derive(CKey& keyChild, unsigned char ccChild[32], unsigned int nChild, const unsigned char cc[32]) const {
+bool CKey::Derive(CKey& keyChild, ChainCode &ccChild, unsigned int nChild, const ChainCode& cc) const {
     assert(IsValid());
     assert(IsCompressed());
     unsigned char out[64];
@@ -216,12 +216,12 @@ bool CKey::Derive(CKey& keyChild, unsigned char ccChild[32], unsigned int nChild
     if ((nChild >> 31) == 0) {
         CPubKey pubkey = GetPubKey();
         assert(pubkey.begin() + 33 == pubkey.end());
-        BIP32Hash(cc, nChild, *pubkey.begin(), pubkey.begin()+1, out);
+        BIP32Hash(cc.begin(), nChild, *pubkey.begin(), pubkey.begin()+1, out);
     } else {
         assert(begin() + 32 == end());
-        BIP32Hash(cc, nChild, 0, begin(), out);
+        BIP32Hash(cc.begin(), nChild, 0, begin(), out);
     }
-    memcpy(ccChild, out+32, 32);
+    memcpy(ccChild.begin(), out+32, 32);
     bool ret = CECKey::TweakSecret((unsigned char*)keyChild.begin(), begin(), out);
     UnlockObject(out);
     keyChild.fCompressed = true;
@@ -259,7 +259,7 @@ void CExtKey::SetMaster(const unsigned char *seed, unsigned int nSeedLen) {
     LockObject(out);
     CHMAC_SHA512(hashkey, sizeof(hashkey)).Write(seed, nSeedLen).Finalize(out);
     key.Set(&out[0], &out[32], true);
-    memcpy(vchChainCode, &out[32], 32);
+    memcpy(vchChainCode.begin(), &out[32], 32);
     UnlockObject(out);
     nDepth = 0;
     nChild = 0;
@@ -272,7 +272,7 @@ CExtPubKey CExtKey::Neuter() const {
     memcpy(&ret.vchFingerprint[0], &vchFingerprint[0], 4);
     ret.nChild = nChild;
     ret.pubkey = key.GetPubKey();
-    memcpy(&ret.vchChainCode[0], &vchChainCode[0], 32);
+    memcpy(&ret.vchChainCode[0],vchChainCode.begin(), 32);
     return ret;
 }
 
@@ -281,7 +281,7 @@ void CExtKey::Encode(unsigned char code[74]) const {
     memcpy(code+1, vchFingerprint, 4);
     code[5] = (nChild >> 24) & 0xFF; code[6] = (nChild >> 16) & 0xFF;
     code[7] = (nChild >>  8) & 0xFF; code[8] = (nChild >>  0) & 0xFF;
-    memcpy(code+9, vchChainCode, 32);
+    memcpy(code+9, vchChainCode.begin(), 32);
     code[41] = 0;
     assert(key.size() == 32);
     memcpy(code+42, key.begin(), 32);
@@ -291,7 +291,7 @@ void CExtKey::Decode(const unsigned char code[74]) {
     nDepth = code[0];
     memcpy(vchFingerprint, code+1, 4);
     nChild = (code[5] << 24) | (code[6] << 16) | (code[7] << 8) | code[8];
-    memcpy(vchChainCode, code+9, 32);
+    memcpy(vchChainCode.begin(), code+9, 32);
     key.Set(code+42, code+74, true);
 }
 
