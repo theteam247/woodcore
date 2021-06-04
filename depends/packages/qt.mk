@@ -153,7 +153,7 @@ $(package)_config_opts_mingw32 += "QMAKE_CFLAGS = '$($(package)_cflags) $($(pack
 $(package)_config_opts_mingw32 += "QMAKE_CXXFLAGS = '$($(package)_cflags) $($(package)_cppflags)'"
 $(package)_config_opts_mingw32 += "QMAKE_LFLAGS = '$($(package)_ldflags)'"
 $(package)_config_opts_mingw32 += -device-option CROSS_COMPILE="$(host)-"
-$(package)_config_opts_mingw32 += -pch -L/usr/x86_64-w64-mingw32/lib OPENSSL_LIBS="-lssl -lcrypto -lssp -lcrypt32"
+$(package)_config_opts_mingw32 += -pch -L/usr/x86_64-w64-mingw32/lib OPENSSL_LIBS="-lssl -lcrypto -lcrypt32 -lws2_32"
 
 $(package)_config_opts_android = -xplatform android-clang
 $(package)_config_opts_android += -android-sdk $(ANDROID_SDK)
