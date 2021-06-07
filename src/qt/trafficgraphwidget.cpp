@@ -10,7 +10,7 @@
 #include <QTimer>
 
 #include <cmath>
-
+#include <QPainterPath>
 #define DESIRED_SAMPLES         800
 
 #define XMARGIN                 10
